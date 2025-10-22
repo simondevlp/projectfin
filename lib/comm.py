@@ -6,8 +6,14 @@ import pyodbc
 import io
 from fastapi import Request
 from fastapi.responses import HTMLResponse
-from lib.graphmaker import pie_chart
+from lib.graphmaker import create_dash_app
+from starlette.middleware.wsgi import WSGIMiddleware
 app = FastAPI()
+
+# Create and mount Dash app
+dash_app = create_dash_app(prefix="/dashboard")  # Mount Dash app at /dashboard
+app.mount("/dashboard", WSGIMiddleware(dash_app.server))
+
 
 origins = ['*']
 
@@ -80,28 +86,29 @@ async def get_transactions():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/pie_chart")
-async def piechart(request: Request):
+# Delete function to remove selected transaction
+@app.delete("/deleteTransaction/{transaction_id}")
+async def delete_transaction(transaction_id: int):
     try:
-        data = await request.json()
-        transactions = data.get("transactions", [])
-        chart_type = data.get("chartType", "category")
-
-        if not transactions:
-            raise HTTPException(status_code=400, detail="No transactions provided")
-
-        # Generate the pie chart
-        figure = pie_chart(transactions, chart_type)
-
-        # Convert the Figure to a PNG image
-        buf = io.BytesIO()
-        figure.savefig(buf, format="png")
-        buf.seek(0)
-
-        # Return the chart as a response
-        return StreamingResponse(buf, media_type="image/png")
+        conn = get_conn()
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM transactions WHERE id = ?', transaction_id)
+        conn.commit()
+        if cursor.rowcount == 0:
+            raise HTTPException(status_code=404, detail="Transaction not found")
+        return {"message": "Transaction deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Endpoint to serve Plotly figure as JSON
+@app.get("/plotly-json")
+async def get_plotly_json():
+    return dash_app.plotly_fig.to_dict()
+
+# Example additional endpoint (for demonstration)
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
 
 
 @app.get("/")
