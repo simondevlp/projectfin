@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:typed_data';
 import 'home.dart';
+
 class AddTransaction extends StatefulWidget {
   const AddTransaction({super.key});
 
@@ -120,7 +120,7 @@ class _SecondRouteState extends State<SecondRoute> {
             children: [
               TextFormField(
                 controller: textController1,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Content',
                   border: OutlineInputBorder(),
                 ),
@@ -131,14 +131,14 @@ class _SecondRouteState extends State<SecondRoute> {
                   return null;
                 },
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   // Currency Dropdown
                   Expanded(
                     flex: 1, // Adjusts the width ratio for dropdown
                     child: DropdownButtonFormField<Map<String, String>>(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Currency',
                         border: OutlineInputBorder(),
                       ),
@@ -148,7 +148,7 @@ class _SecondRouteState extends State<SecondRoute> {
                                 child: Row(
                                   children: [
                                     Text(currency['flag']!),
-                                    SizedBox(width: 8),
+                                    const SizedBox(width: 8),
                                     Text(currency['code']!),
                                   ],
                                 ),
@@ -163,20 +163,21 @@ class _SecondRouteState extends State<SecondRoute> {
                           .map((currency) => Row(
                                 children: [
                                   Text(currency['flag']!),
-                                  SizedBox(width: 8),
+                                  const SizedBox(width: 8),
                                   Text(currency['code']!),
                                 ],
                               ))
                           .toList(),
                     ),
                   ),
-                  SizedBox(width: 10), // Margin between dropdown and text field
+                  const SizedBox(
+                      width: 10), // Margin between dropdown and text field
                   // Amount Text Field
                   Expanded(
                     flex: 3, // Adjusts the width ratio for text field
                     child: TextFormField(
                       controller: textController2,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Amount',
                         border: OutlineInputBorder(),
                       ),
@@ -195,9 +196,9 @@ class _SecondRouteState extends State<SecondRoute> {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               DropdownButtonFormField<String>(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Type',
                   border: OutlineInputBorder(),
                 ),
@@ -209,13 +210,14 @@ class _SecondRouteState extends State<SecondRoute> {
                     .toList(),
                 onChanged: (value) {
                   setState(() {
-                    dropdownValue1 = value; // Update dropdownValue1 when a new value is selected
+                    dropdownValue1 =
+                        value; // Update dropdownValue1 when a new value is selected
                   });
                 },
                 validator: (value) =>
                     value == null ? 'Please select the transaction type' : null,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: dateController,
                 decoration: const InputDecoration(
@@ -225,9 +227,9 @@ class _SecondRouteState extends State<SecondRoute> {
                 readOnly: true,
                 onTap: () => _selectDate(context),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               DropdownButtonFormField<String>(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Category',
                   border: OutlineInputBorder(),
                 ),
@@ -239,15 +241,16 @@ class _SecondRouteState extends State<SecondRoute> {
                     .toList(),
                 onChanged: (value) {
                   setState(() {
-                    dropdownValue2 = value; // Update dropdownValue1 when a new value is selected
+                    dropdownValue2 =
+                        value; // Update dropdownValue1 when a new value is selected
                   });
                 },
                 validator: (value) =>
                     value == null ? 'Please select a category' : null,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               DropdownButtonFormField<String>(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Tags',
                   border: OutlineInputBorder(),
                 ),
@@ -259,16 +262,17 @@ class _SecondRouteState extends State<SecondRoute> {
                     .toList(),
                 onChanged: (value) {
                   setState(() {
-                    dropdownValue3 = value; // Update dropdownValue1 when a new value is selected
+                    dropdownValue3 =
+                        value; // Update dropdownValue1 when a new value is selected
                   });
                 },
                 validator: (value) =>
                     value == null ? 'Please select a tag' : null,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: finalTextController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Notes',
                   border: OutlineInputBorder(),
                 ),
@@ -279,23 +283,27 @@ class _SecondRouteState extends State<SecondRoute> {
                   return null;
                 },
               ),
-              Spacer(),
+              const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Home()));
                     },
                     style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: const Color.fromRGBO(255, 203, 54, 244)),
+                          side: const BorderSide(
+                              color: Color.fromRGBO(255, 203, 54, 244)),
                         ),
                       ),
                     ),
-                    child: Text('Cancel'),
+                    child: const Text('Cancel'),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -306,16 +314,19 @@ class _SecondRouteState extends State<SecondRoute> {
                       }
                     },
                     style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                      backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 203, 54, 244)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      foregroundColor:
+                          WidgetStateProperty.all<Color>(Colors.white),
+                      backgroundColor: WidgetStateProperty.all<Color>(
+                          const Color.fromARGB(255, 203, 54, 244)),
+                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: const Color.fromARGB(255, 203, 54, 244)),
+                          side: const BorderSide(
+                              color: Color.fromARGB(255, 203, 54, 244)),
                         ),
                       ),
                     ),
-                    child: Text('Add'),
+                    child: const Text('Add'),
                   ),
                 ],
               ),
